@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Art Craft - Handmade gifts, resin art, keychains and customized frames.">
+  <title>The Art Craft | Handmade with Love</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a class="brand brand-script" href="#home">
+        <span>The Art Craft</span>
+        <small>HANDMADE WITH LOVE</small>
+      </a>
+      <div class="nav-links">
+        <a class="active" href="#home">Home</a>
+        <a href="#about">About Us</a>
+        <a href="#products">Products</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#contact">Contact Us</a>
+      </div>
+      <button class="cart-btn" onclick="orderWhatsApp('Product Inquiry')" aria-label="Cart">
+        <i class="fa-solid fa-bag-shopping"></i><span>0</span>
+      </button>
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+    </div>
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home">Home</a><a href="#about">About Us</a><a href="#products">Products</a>
+      <a href="#gallery">Gallery</a><a href="#reviews">Reviews</a><a href="#contact">Contact Us</a>
+    </div>
+  </nav>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-overlay"></div>
+      <div class="hero-content reveal visible">
+        <div class="eyebrow">HANDCRAFTED • UNIQUE • MADE WITH LOVE</div>
+        <h1>Handmade with Love,<br><em>Made for You</em></h1>
+        <div class="heart-line"><span></span>♡<span></span></div>
+        <p>Beautifully handcrafted keychains, frames, resin art, and more.<br>Made with passion, just for you.</p>
+        <div class="hero-actions">
+          <a class="btn btn-pink btn-large" href="#products">Explore Products <i class="fa-solid fa-arrow-right"></i></a>
+          <button class="btn btn-outline-white btn-large" onclick="orderWhatsApp('Product Inquiry')">Order on WhatsApp <i class="fa-brands fa-whatsapp"></i></button>
+        </div>
+      </div>
+      <a class="scroll-cue" href="#about" aria-label="Scroll down"><i class="fa-solid fa-chevron-down"></i></a>
+    </section>
+
+    <section class="about section" id="about">
+      <div class="container narrow reveal">
+        <h2>About Us</h2>
+        <p>At The Art Craft, every product is handmade with creativity, passion, and attention to detail. We specialize in customized gifts, resin art, keychains, photo frames, and handcrafted decorations made especially for our customers. Each piece tells a story of artistry and love, crafted to bring joy and meaning to your life.</p>
+      </div>
+    </section>
+
+    <section class="products section" id="products">
+      <div class="container">
+        <div class="section-heading reveal">
+          <h2>Our Products</h2>
+          <p>Discover our collection of handmade treasures</p>
+        </div>
+
+        <div class="search-wrap reveal">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="searchInput" type="search" placeholder="Search products..." autocomplete="off">
+          <button id="clearSearch" aria-label="Clear search"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="filters reveal" id="filters"></div>
+        <div class="product-grid" id="productGrid"></div>
+        <p class="empty" id="emptyState">No products found. Try a different search or category.</p>
+      </div>
+    </section>
+
+    <section class="gallery section" id="gallery">
+      <div class="container">
+        <div class="section-heading reveal"><h2>Our Gallery</h2></div>
+        <div class="gallery-grid" id="galleryGrid"></div>
+      </div>
+    </section>
+
+    <section class="why section" id="why-us">
+      <div class="container">
+        <div class="section-heading reveal"><h2>Why Choose Us</h2></div>
+        <div class="why-grid" id="whyGrid"></div>
+      </div>
+    </section>
+
+    <section class="reviews section" id="reviews">
+      <div class="review-form-container">
+  <h2>Share your experience</h2>
+  <p>Your feedback helps others — thank you!</p>
+      <form id="reviewForm">
+    <div class="form-group">
+          <label for="reviewProduct">Product (optional)</label>
+          <select id="reviewProduct">
+            <option value="">All products</option>
+          </select>
+    </div>
+
+    <div class="form-group">
+          <label for="reviewName">Your name</label>
+          <input type="text" id="reviewName" placeholder="Enter your name">
+    </div>
+
+    <div class="form-group">
+      <label>Rating</label>
+      <div class="star-rating">
+        <input type="radio" id="star5" name="rating" value="5"><label for="star5">★</label>
+        <input type="radio" id="star4" name="rating" value="4"><label for="star4">★</label>
+        <input type="radio" id="star3" name="rating" value="3"><label for="star3">★</label>
+        <input type="radio" id="star2" name="rating" value="2"><label for="star2">★</label>
+        <input type="radio" id="star1" name="rating" value="1"><label for="star1">★</label>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="reviewMessage">Message</label>
+      <textarea id="reviewMessage" placeholder="Tell others what you loved (or what could be improved)..."></textarea>
+    </div>
+
+    <div class="button-group">
+      <button type="button" id="clearReview" class="btn-clear">Clear</button>
+      <button type="submit" id="submitReview" class="btn-submit">Submit Review</button>
+    </div>
+  </form>
+</div>
+  <div class="container">
+    <div id="reviewList" class="review-grid" style="margin-top:28px"></div>
+  </div>
+    </section>
+
+  <!-- Admin panel trigger -->
+  <button id="adminBtn" style="position:fixed;left:16px;bottom:24px;z-index:200;background:var(--dark);color:white;padding:10px 12px;border-radius:8px;border:0;">Admin</button>
+  <div id="adminPanel" style="position:fixed;left:16px;bottom:74px;z-index:200;background:white;padding:16px;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.12);display:none;min-width:320px;max-width:360px">
+    <h4 style="margin-top:0">Admin</h4>
+    <div id="adminLoginArea">
+      <input id="adminKey" type="password" placeholder="Admin key" style="width:100%;padding:8px;margin-bottom:8px;border-radius:6px;border:1px solid #ddd">
+      <div style="text-align:right"><button id="adminLogin" class="btn btn-gold">Login</button></div>
+    </div>
+    <div id="adminTools" style="display:none">
+      <h5>Add Product</h5>
+        <input id="editingProductId" type="hidden">
+      <input id="pTitle" placeholder="Title" style="width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ddd">
+      <input id="pPrice" placeholder="Price (e.g. 499)" style="width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ddd">
+      <select id="pCategory" style="width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ddd;background:#fcfbfa">
+        <option value="">Select category</option>
+      </select>
+      <input id="pImage" placeholder="Image URL" style="width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ddd">
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+        <input id="pImageFile" type="file" accept="image/*" style="flex:1">
+        <img id="pImagePreview" src="" alt="preview" style="width:56px;height:40px;object-fit:cover;border-radius:6px;border:1px solid #eee;display:none">
+      </div>
+      <textarea id="pDesc" placeholder="Description" rows="3" style="width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ddd"></textarea>
+      <div style="text-align:right"><button id="addProductBtn" class="btn btn-gold">Add Product</button></div>
+      <div style="margin-top:12px">
+        <h5 style="margin-bottom:8px">Existing Products</h5>
+        <div id="adminProducts" style="max-height:240px;overflow:auto;border-top:1px solid #eee;padding-top:8px"></div>
+      </div>
+      <div style="margin-top:12px">
+        <h5 style="margin-bottom:8px">Manage Reviews</h5>
+        <div id="adminReviews" style="max-height:240px;overflow:auto;border-top:1px solid #eee;padding-top:8px"></div>
+      </div>
+    </div>
+  </div>
+
+    <section class="contact section" id="contact">
+      <div class="container narrow reveal">
+        <div class="section-heading">
+          <h2>Get in Touch</h2>
+          <p>To place an order or discuss your custom design, simply contact us through WhatsApp or Gmail.</p>
+        </div>
+        <div class="contact-actions">
+          <button class="btn whatsapp btn-large" onclick="orderWhatsApp('Product Inquiry')"><i class="fa-brands fa-whatsapp"></i> WhatsApp</button>
+          <a class="btn btn-gold btn-large" href="mailto:contact@theartcraft.com"><i class="fa-solid fa-envelope"></i> Email Us</a>
+        </div>
+        <div class="socials">
+          <a href="https://www.instagram.com/theart_craft__/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook"></i></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-grid">
+      <div><h3>The Art Craft</h3><p>Handmade with ❤️</p></div>
+      <div><h4>Quick Links</h4><a href="#products">Products</a><a href="#gallery">Gallery</a><a href="#why-us">About</a><a href="#contact">Contact</a></div>
+      <div><h4>Contact</h4><p>Email: contact@theartcraft.com</p><p>WhatsApp: +91 8310654971</p><p>Instagram: <a href="https://www.instagram.com/theart_craft__/" target="_blank" rel="noopener">@theart_craft</a></p></div>
+    </div>
+    <div class="copyright">© 2026 The Art Craft. All rights reserved. Handmade with Love.</div>
+  </footer>
+
+  <button class="floating whatsapp-float" onclick="orderWhatsApp('Product Inquiry')" title="Chat on WhatsApp"><i class="fa-brands fa-whatsapp"></i></button>
+  <button class="floating top-btn" id="topBtn" onclick="scrollToTop()" title="Scroll to top"><i class="fa-solid fa-chevron-up"></i></button>
+
+  <script src="script.js"></script>
+</body>
+</html>
