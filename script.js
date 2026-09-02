@@ -1,5 +1,11 @@
 const products = [];
-const categories=["All","Keychains","Frames","Resin Art","Gifts"];
+const categories=[
+  "All",
+  "Keychains",
+  "Frames",
+  "Misc",
+];
+const categoryOrder = ["All", "Keychains", "Frames", "Misc"];
 const why=[
  ["fa-hand-holding-heart","100% Handmade","Every piece crafted with care"],
  ["fa-gem","Premium Quality","Best materials used"],
@@ -17,7 +23,18 @@ const search=document.getElementById("searchInput");
 const empty=document.getElementById("emptyState");
 
 function renderFilters(){
-  const available = ["All", ...new Set(products.map(p => p.category).filter(Boolean))];
+  const dynamicCategories = [...new Set(products.map(p => p.category).filter(Boolean))];
+  const available = [
+    "All",
+    ...dynamicCategories.sort((a, b) => {
+      const indexA = categoryOrder.indexOf(a);
+      const indexB = categoryOrder.indexOf(b);
+      if (indexA === -1 && indexB === -1) return a.localeCompare(b);
+      if (indexA === -1) return 1;
+      if (indexB === -1) return -1;
+      return indexA - indexB;
+    })
+  ];
   if (!products.length) {
     filters.innerHTML = "";
     return;
@@ -38,12 +55,21 @@ function renderProducts(){
     <article class="product reveal visible">
       <div class="product-img"><img src="${p.image}" alt="${p.name}" loading="lazy"><span class="badge">${p.category}</span></div>
       <div class="product-body">
-        <h3>${p.name}</h3><p class="product-desc">${p.description}</p>
+        <h3>${p.name}</h3><div class="description-wrap"><p class="product-desc truncated" id="description-${p.id}">${p.description}</p><button type="button" class="show-more" data-description-id="description-${p.id}" aria-expanded="false" aria-label="See full product description" onclick="toggleProductDescription(this)">See more</button></div>
         <div class="product-bottom"><span class="price">${p.price}</span><span class="stars">${'★'.repeat(Math.round(p.ratingAvg||0)) + '☆'.repeat(Math.max(0,5-Math.round(p.ratingAvg||0)))}${p.ratingCount?(' <small style="color:#666;margin-left:6px">('+p.ratingCount+')</small>'):''}</span></div>
         <button class="btn btn-gold" onclick="orderWhatsApp('${p.name.replaceAll("'","\\'")}')">Order on WhatsApp</button>
       </div>
     </article>`).join("");
   empty.style.display=list.length?"none":"block";
+}
+function toggleProductDescription(button){
+  const description=document.getElementById(button.dataset.descriptionId);
+  if(!description) return;
+  const expanded=description.classList.toggle('expanded');
+  description.classList.toggle('truncated', !expanded);
+  button.textContent=expanded?'See less':'See more';
+  button.setAttribute('aria-expanded', String(expanded));
+  button.setAttribute('aria-label', expanded?'Collapse product description':'See full product description');
 }
 function renderGallery(){
   const galleryEl = document.getElementById('galleryGrid');
@@ -83,7 +109,7 @@ const observer=new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("visible")});
 },{threshold:.12});
 function observeReveals(){document.querySelectorAll(".reveal:not(.visible)").forEach(el=>observer.observe(el))}
-renderFilters();renderProducts();renderGallery();renderWhy();observeReveals();populateAdminCategorySelect();
+renderFilters();renderProducts();renderGallery();renderWhy();observeReveals();populateAdminCategorySelect();populateReviewCategorySelect();
 
 // --- New: dynamic API integration for products, reviews, and admin ---
 async function fetchProducts(){
@@ -144,6 +170,14 @@ function populateReviewProductSelect(){
   sel.innerHTML='<option value="">All products</option>' + products.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
 }
 
+function populateReviewCategorySelect(){
+  const sel=document.getElementById('reviewCategory');
+  if(!sel) return;
+  const current=sel.value;
+  sel.innerHTML=categories.map(c=>`<option value="${c === 'All' ? '' : c}">${c}</option>`).join('');
+  sel.value=current;
+}
+
 function populateAdminCategorySelect(){
   const sel = document.getElementById('pCategory');
   if(!sel) return;
@@ -157,13 +191,15 @@ document.getElementById('reviewForm')?.addEventListener('submit', async (e)=>{
   const name = document.getElementById('reviewName').value.trim();
   const rating = parseInt(document.querySelector('.star-rating input[name="rating"]:checked')?.value,10) || 5;
   const message = document.getElementById('reviewMessage').value.trim();
+  const category = document.getElementById('reviewCategory').value || null;
   const productId = document.getElementById('reviewProduct').value || null;
   if(!name || !message){ alert('Please enter your name and message'); return; }
   try{
-    const res = await fetch('/api/reviews', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify({productId,name,rating,message}) });
+    const res = await fetch('/api/reviews', { method: 'POST', headers: {'content-type':'application/json'}, body: JSON.stringify({productId,category,name,rating,message}) });
     if(!res.ok) throw new Error('Failed to submit');
     document.getElementById('reviewName').value = '';
     document.getElementById('reviewMessage').value = '';
+    document.getElementById('reviewCategory').value = '';
     document.getElementById('reviewProduct').value = '';
     // uncheck rating radios
     document.querySelectorAll('.star-rating input[name="rating"]').forEach(r=>r.checked=false);
@@ -176,6 +212,7 @@ document.getElementById('reviewForm')?.addEventListener('submit', async (e)=>{
 document.getElementById('clearReview')?.addEventListener('click', ()=>{
   document.getElementById('reviewName').value='';
   document.getElementById('reviewMessage').value='';
+  document.getElementById('reviewCategory').value='';
   document.getElementById('reviewProduct').value='';
   document.querySelectorAll('.star-rating input[name="rating"]').forEach(r=>r.checked=false);
 });
@@ -183,7 +220,30 @@ document.getElementById('clearReview')?.addEventListener('click', ()=>{
 // Admin UI
 const adminBtn=document.getElementById('adminBtn');
 const adminPanel=document.getElementById('adminPanel');
-adminBtn?.addEventListener('click',()=>{adminPanel.style.display = adminPanel.style.display==='block'?'none':'block'});
+
+function isAdminAccessAllowed(){
+  const urlAdminFlag = new URLSearchParams(window.location.search).get('admin');
+  return urlAdminFlag === '1' || urlAdminFlag === 'true';
+}
+
+function refreshAdminVisibility(){
+  if(!adminBtn) return;
+  const allowed = isAdminAccessAllowed();
+  adminBtn.style.display = allowed ? 'block' : 'none';
+  if(!allowed && adminPanel){
+    adminPanel.style.display = 'none';
+    adminPanel.classList.remove('admin-fullscreen');
+  }
+}
+
+refreshAdminVisibility();
+
+adminBtn?.addEventListener('click',()=>{
+  if(!isAdminAccessAllowed()) return;
+  if(adminPanel){
+    adminPanel.style.display = adminPanel.style.display==='block'?'none':'block';
+  }
+});
 
 document.getElementById('adminLogin')?.addEventListener('click', async ()=>{
   const key=document.getElementById('adminKey').value.trim();
@@ -192,6 +252,7 @@ document.getElementById('adminLogin')?.addEventListener('click', async ()=>{
     const res=await fetch('/api/admin/verify',{headers:{'x-admin-key':key}});
     if(!res.ok) throw new Error('Unauthorized');
     localStorage.setItem('adminKey',key);
+    refreshAdminVisibility();
     document.getElementById('adminLoginArea').style.display='none';
     document.getElementById('adminTools').style.display='block';
     // show full-page admin panel
@@ -296,7 +357,7 @@ async function loadAdminReviews(){
       <div class="admin-review-item" style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f1f1">
         <div style="flex:1">
           <strong>${escapeHtml(r.name||'Anonymous')}</strong>
-          <div style="font-size:.85rem;color:#666">${'★'.repeat(r.rating||5)} • ${r.productId?('Product ID: '+r.productId):'General'}</div>
+          <div style="font-size:.85rem;color:#666">${'★'.repeat(r.rating||5)} • ${r.category||'All'}${r.productId?(' • Product ID: '+r.productId):''}</div>
           <div style="margin-top:6px;color:#444">${escapeHtml(r.message)}</div>
         </div>
         <div style="margin-left:8px">
