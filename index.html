@@ -44,7 +44,7 @@
         <div class="eyebrow">HANDCRAFTED • UNIQUE • MADE WITH LOVE</div>
         <h1>Handmade with Love,<br><em>Made for You</em></h1>
         <div class="heart-line"><span></span>♡<span></span></div>
-        <p>Beautifully handcrafted keychains, frames, resin art, and more.<br>Made with passion, just for you.</p>
+        <p>Beautifully handcrafted keychains, frames, and gifts and more.<br>Made with passion, just for you.</p>
         <div class="hero-actions">
           <a class="btn btn-pink btn-large" href="#products">Explore Products <i class="fa-solid fa-arrow-right"></i></a>
           <button class="btn btn-outline-white btn-large" onclick="orderWhatsApp('Product Inquiry')">Order on WhatsApp <i class="fa-brands fa-whatsapp"></i></button>
@@ -56,7 +56,7 @@
     <section class="about section" id="about">
       <div class="container narrow reveal">
         <h2>About Us</h2>
-        <p>At The Art Craft, every product is handmade with creativity, passion, and attention to detail. We specialize in customized gifts, resin art, keychains, photo frames, and handcrafted decorations made especially for our customers. Each piece tells a story of artistry and love, crafted to bring joy and meaning to your life.</p>
+        <p>At The Art Craft, every product is handmade with creativity, passion, and attention to detail. We specialize in customized gifts, keychains, photo frames, and handcrafted decorations made especially for our customers. Each piece tells a story of artistry and love, crafted to bring joy and meaning to your life.</p>
       </div>
     </section>
 
@@ -99,6 +99,13 @@
   <p>Your feedback helps others — thank you!</p>
       <form id="reviewForm">
     <div class="form-group">
+          <label for="reviewCategory">Category</label>
+          <select id="reviewCategory">
+            <option value="">All</option>
+          </select>
+    </div>
+
+    <div class="form-group">
           <label for="reviewProduct">Product (optional)</label>
           <select id="reviewProduct">
             <option value="">All products</option>
@@ -138,7 +145,7 @@
     </section>
 
   <!-- Admin panel trigger -->
-  <button id="adminBtn" style="position:fixed;left:16px;bottom:24px;z-index:200;background:var(--dark);color:white;padding:10px 12px;border-radius:8px;border:0;">Admin</button>
+  <button id="adminBtn" style="position:fixed;left:16px;bottom:24px;z-index:200;background:var(--dark);color:white;padding:10px 12px;border-radius:8px;border:0;display:none;">Admin</button>
   <div id="adminPanel" style="position:fixed;left:16px;bottom:74px;z-index:200;background:white;padding:16px;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,.12);display:none;min-width:320px;max-width:360px">
     <h4 style="margin-top:0">Admin</h4>
     <div id="adminLoginArea">
