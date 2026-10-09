@@ -17,7 +17,9 @@ jobs:
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
+            set -e
             cd /var/www/theart_craft
-            git pull origin main
-            npm install --production
-            pm2 restart art-craft
+            git pull --ff-only origin main
+            npm ci --omit=dev
+            pm2 startOrReload /home/deploy/.config/theart_craft/ecosystem.config.cjs --update-env
+            pm2 save
