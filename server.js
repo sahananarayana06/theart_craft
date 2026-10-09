@@ -8,8 +8,9 @@
   const PORT = process.env.PORT || 3000;
   const ADMIN_KEY = process.env.ADMIN_KEY || 'adminsecret';
 
-  const DB_FILE = path.join(__dirname, 'data.db');
-  const db = new sqlite3.Database(DB_FILE);
+  
+const DB_FILE = process.env.DB_FILE || '/var/lib/theart_craft/data.db';
+const db = new sqlite3.Database(DB_FILE);
 
   // ensure uploads folder exists
   const UPLOADS_DIR = path.join(__dirname, 'uploads');
